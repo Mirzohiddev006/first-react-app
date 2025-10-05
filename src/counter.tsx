@@ -1,51 +1,34 @@
 import { Component } from "react";
 import { Button } from "./components/ui/button";
 import { Badge } from "./components/ui/badge";
+import { MinusIcon, PlusIcon, TrashIcon } from "lucide-react";
 
 interface CounterProps {
-  children?: React.ReactNode;
-  initial: number;
+  count: number;
+  step: number;
+  increment: () => void;
+  decrement: () => void;
+  changeStep: () => void;
 }
 
 export class Counter extends Component<CounterProps> {
-  state = {
-    count: 0
-  };
-
-  constructor(props: CounterProps) {
-    super(props);
-    this.state.count = props.initial;
-  }
-
-  increment = () => {
-    this.setState({ count: this.state.count + 1 });
-  };
-
-  decrement = () => {
-    this.setState({ count: this.state.count - 1 });
-  };
-
-  delete = () => {
-    this.setState({ deleted: true });
-  };
-
   render() {
-    if ((this.state as any).deleted) {
-      return null; 
-    }
+    const { count, increment, decrement, step, changeStep } = this.props;
 
-    const { count } = this.state;
     return (
       <div className="flex gap-2">
         <Badge variant={count ? "secondary" : "default"}>{count || "Zero"}</Badge>
-        <Button variant="destructive" onClick={this.delete}>
-          Delete
+        <Button variant="outline" onClick={changeStep}>
+          Step: {step}
         </Button>
-        <Button variant="outline" onClick={this.decrement} disabled={count === 0}>
-          Decrement
+        <Button variant="destructive">
+          <TrashIcon />
         </Button>
-        <Button variant="outline" onClick={this.increment}>
-          Increment
+        <Button variant="outline" disabled={count === 0} onClick={decrement}>
+          <MinusIcon />
+        </Button>
+        <Button variant="outline" onClick={increment}>
+          <PlusIcon />
         </Button>
       </div>
     );
